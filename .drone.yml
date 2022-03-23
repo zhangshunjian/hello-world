@@ -7,27 +7,24 @@ steps:
     commands:
       - echo hello
       - echo world
-- name: notify-wechatwork
+  - name: notify
     image: fifsky/drone-wechat-work
-    pull: if-not-exists
+    pull: always
     settings:
       url: https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=43d424c0-3581-4e26-a9a3-c985ac48e31b
       msgtype: markdown
       content: |
         {{if eq .Status "success" }}
-        #### 🎉 ${DRONE_REPO} 测试环境构建成功
-        > Branch: ${DRONE_BRANCH}
-        > Commit: [${DRONE_COMMIT_MESSAGE}  ](${DRONE_COMMIT_LINK})
+        #### 🎉 ${DRONE_REPO} 构建成功
+        > Commit: [${DRONE_COMMIT_MESSAGE}](${DRONE_COMMIT_LINK})
         > Author: ${DRONE_COMMIT_AUTHOR}
-        > PATH: http://test.tall.wiki/checkwork/
-        > [点击查看](http://test.tall.wiki/checkwork/)
+        > [点击查看](${DRONE_BUILD_LINK})
         {{else}}
-        #### ❌ ${DRONE_REPO} 测试环境构建失败
-        > Branch: ${DRONE_BRANCH}
-        > Commit: [${DRONE_COMMIT_MESSAGE}  ](${DRONE_COMMIT_LINK})
+        #### ❌ ${DRONE_REPO} 构建失败
+        > Commit: [${DRONE_COMMIT_MESSAGE}](${DRONE_COMMIT_LINK})
         > Author: ${DRONE_COMMIT_AUTHOR}
         > 请立即修复!!!
-        > [点击查看](http://test.tall.wiki/checkwork/)
+        > [点击查看](${DRONE_BUILD_LINK})
         {{end}}
     when:
       status:
